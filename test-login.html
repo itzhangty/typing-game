@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><body>
+<h1>登录测试</h1>
+<button id="btn">登录</button>
+<div id="result"></div>
+<script>
+// Minimal Supabase REST wrapper
+var _SB_URL="https://brgyyohuagoxodqbvgdc.supabase.co/rest/v1";
+var _SB_KEY="sb_publishable_ttaTO8y3ww7EjENHkj5rng_Wa1YQ8Oo";
+function _r(m,t,qs,b,eh){var h={"apikey":_SB_KEY,"Authorization":"Bearer "+_SB_KEY,"Content-Type":"application/json"};if(eh)Object.assign(h,eh);return fetch(_SB_URL+"/"+t+(qs||""),{method:m,headers:h,body:b?JSON.stringify(b):null}).then(function(r){if(!r.ok)return r.text().then(function(t){return{data:null,error:{message:"HTTP "+r.status}};});return r.json().then(function(j){return{data:j,error:null};}).catch(function(){return{data:null,error:null};});}).catch(function(e){return{data:null,error:{message:e.message}};});}
+var db={from:function(t){var s="*",q="",ms=false,c={select:function(x){s=x||"*";return c;},eq:function(k,v){q+=(q?"&":"?")+k+"=eq."+encodeURIComponent(v);return c;},maybeSingle:function(){ms=true;return c;},then:function(r,j){_r("GET",t,(s!=="*"?"?select="+s:"")+q,null,ms?{"Accept":"application/vnd.pgrst.object+json"}:null).then(r,j);}};return c;}};
+
+async function _hp(p,u){var e=new TextEncoder();var b=await crypto.subtle.digest("SHA-256",e.encode(p+"::"+u));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("");}
+
+document.getElementById("btn").onclick=async function(){
+  var el=document.getElementById("result");
+  el.textContent="测试中...";
+  try{
+    // Test 1: basic fetch
+    var r1=await db.from("profiles").select("user_id").eq("username","testcheck").maybeSingle();
+    el.textContent="Test 1 (profiles query): "+JSON.stringify(r1);
+  }catch(e){
+    el.textContent="Error: "+e.message;
+  }
+};
+</script></body></html>
